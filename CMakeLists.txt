@@ -5,8 +5,9 @@ project(
 	LANGUAGES C
 )
 
+include_directories(include)
 find_package(Curses REQUIRED)
 include_directories(Tergine ${CURSES_INCLUDE_DIRS})
 
-add_executable(Tergine main.c)
+add_executable(Tergine main.c src/draw.c)
 target_link_libraries(Tergine ${CURSES_LIBRARIES})

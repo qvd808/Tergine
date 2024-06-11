@@ -1,26 +1,48 @@
-// #include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <curses.h>
+#include <sys/ioctl.h>
+#include "draw.h"
+
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 int running = 1;
-
 void exit_program_handler(int n);
-
-void main_program(void) {
-}
+void init_program(void);
 
 int main() {
 
-	int num = 0;
 	signal(SIGINT, exit_program_handler);
+	init_program();
 
+	int num = 0;
+	while (running) {
+		attrset(COLOR_PAIR(1));
+		draw_rect(num, 33, 3, 3);
+		num += 1;
+		num %= 36;
+
+		erase();
+		usleep(100000);
+	}
+
+	endwin();
+	return 0;
+}
+
+void exit_program_handler(int n) {
+	running = 0;
+}
+void init_program(void) {
 	initscr();
 	keypad(stdscr, TRUE);
 	nonl();
 	cbreak();
 	echo();
+	wtimeout(stdscr, 250);
+	curs_set(0);
 
 	if (has_colors()) {
 		start_color();
@@ -33,26 +55,4 @@ int main() {
 		init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
 		init_pair(7, COLOR_WHITE, COLOR_BLACK);
 	}
-
-	for (;;) {
-		// int c = getch();
-		// wgetch(stdscr);
-		attrset(COLOR_PAIR(num % 8));
-		printw("A");
-		refresh();
-		num++;
-	}
-
-	exit_program_handler(0);
-
-	// while (running) {
-	// 	main_program();
-	// }
-	// return 0;
-}
-
-void exit_program_handler(int n) {
-	running = 0;
-	endwin();
-	exit(0);
 }
