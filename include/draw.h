@@ -4,6 +4,7 @@
 #include <curses.h>
 // #include <ncursesw/ncurses.h>
 #include <unistd.h>
+#include <curses.h>
 #include <sys/ioctl.h>
 // #include <unistd.h>
 
