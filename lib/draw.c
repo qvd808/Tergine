@@ -14,7 +14,8 @@ void draw_rect(int x, int y, int width, int height) {
 		move(y + i, x);
 		for (int j = 0; j < width; j++) {
 
-			printw("\xc3\x7f");
+			// printw("\xc3\x7f");
+			printw(" *");
 
 			if (j + x >= size.ws_col - 1){
 				break;

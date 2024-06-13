@@ -9,7 +9,8 @@ project(
 )
 
 # Include the include directory
-include_directories(include)
+include_directories(${CMAKE_SOURCE_DIR}/include)
+link_libraries(${CMAKE_SOURCE_DIR}/lib)
 
 #Handle library
 # find_library("ncursesw" NAME curses)
@@ -22,5 +23,5 @@ find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIRS})
 
 #Build an exuctable
-add_executable(Tergine main.c src/draw.c)
+add_executable(Tergine main.c lib/draw.c lib/setup.c)
 target_link_libraries(Tergine ${CURSES_LIBRARIES})
