@@ -1,9 +1,7 @@
 #include <signal.h>
-#include <unistd.h>
 // #include <stdlib.h>
-#include <curses.h>
-#include <sys/ioctl.h>
 #include "draw.h"
+#include <locale.h>
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
@@ -17,12 +15,9 @@ int main() {
 	signal(SIGINT, exit_program_handler);
 	init_program();
 
-	int num = 0;
 	while (running) {
 		attrset(COLOR_PAIR(1));
-		draw_rect(num, 33, 3, 3);
-		num += 1;
-		num %= 36;
+		draw_rect(0, 0, 3, 3);
 
 		erase();
 		usleep(100000);
@@ -43,6 +38,7 @@ void init_program(void) {
 	echo();
 	wtimeout(stdscr, 250);
 	curs_set(0);
+	setlocale(LC_ALL, "");
 
 	if (has_colors()) {
 		start_color();
