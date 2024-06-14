@@ -18,7 +18,7 @@ int main() {
 	int num = 0;
 	while (running) {
 		attrset(COLOR_PAIR(1));
-		draw_rect(num, 0, size, size);
+		draw_triangle(0, 0, size, size);
 		num += 1;
 		num %= 36;
 

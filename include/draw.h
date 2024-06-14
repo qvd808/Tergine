@@ -9,5 +9,6 @@
 // #include <unistd.h>
 
 void draw_rect(int x, int y, int width, int height);
+void draw_right_triangle(int x, int y, int width, int height);
 
 #endif
