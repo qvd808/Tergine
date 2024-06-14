@@ -60,3 +60,10 @@ void draw_right_triangle(int x, int y, int width, int height) {
 	refresh();
 }
 
+
+void draw_line(struct Point start, struct Point end) {
+	
+	for (int i = 0; i < 5; i++) {
+		printw("*\n");
+	}
+}
