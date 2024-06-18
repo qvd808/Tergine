@@ -13,6 +13,7 @@ struct Point {
 	int y;
 };
 
+
 void plotLineLow(int x0, int y0, int x1, int y1);
 void plotLineHigh(int x0, int y0, int x1, int y1);
 void draw_rect(int x, int y, int width, int height);

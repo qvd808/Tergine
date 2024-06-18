@@ -6,18 +6,21 @@
 
 void draw_rect(int x, int y, int width, int height) {
 
+	char cBlock = (char)0x2588;
+
 	struct winsize size;
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) < 0) {
 		printf("TIOCGWINSZ error!\n");
 	}
 
 	for (int i = 0; i < height; i++) {
-		// move(y + i, x);
+		move(y + i, x);
 		for (int j = 0; j < width; j++) {
 
 			// printw("\xc3\x7f");
-			mvaddstr(y + i, x + j, "*");
-			// printw(" *");
+			mvaddstr(y + i, x + 2*j, "^#");
+			// mvaddch(y + i, x + 2*j, cBlock);
+			// addch(A_REVERSE);
 
 			if (j + x >= size.ws_col - 1){
 				break;
@@ -62,8 +65,37 @@ void draw_right_triangle(int x, int y, int width, int height) {
 }
 
 
-
 int draw_line(struct Point start, struct Point end) {
+	struct winsize size;
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) < 0) {
+		printf("TIOCGWINSZ error!\n");
+		return 0;
+	}
+
+	for (int i = 0; i < end.y - start.y; i++) {
+		for (int j = 0; j < end.x - start.x; j++) {
+
+			// printw("\xc3\x7f");
+			
+			if (i == j) {
+				mvaddstr(start.y + i, start.x + 2*j, "^#");
+			}
+			// mvaddch(y + i, x + 2*j, cBlock);
+			// addch(A_REVERSE);
+
+			if (j + start.x >= size.ws_col - 1){
+				break;
+			}
+		}
+		if (i + start.y >= size.ws_row - 1){
+			break;
+		}
+	}
+
+	return 1;
+}
+
+int draw_line_test(struct Point start, struct Point end) {
 	
 	struct winsize size;
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) < 0) {
@@ -110,7 +142,7 @@ int draw_line(struct Point start, struct Point end) {
 	// Bresenhams's line algorithm or Xiaolin Wu's Line algorithm
 void plotLineLow(int x0, int y0, int x1, int y1) {
 
-	int dx = x1 - x0;
+	int dx = 2*(x1 - x0);
 	int dy = y1 - y0;
 	int yi = 1;
 	
@@ -122,8 +154,8 @@ void plotLineLow(int x0, int y0, int x1, int y1) {
 	int D = (2 * dy ) - dx;
 	int y = y0;
 	
-	for (int i = 0; i <= x1 - x0; i++) {
-		mvaddstr(y, x0 + i, "*");
+	for (int i = 0; i <= 2*(x1 - x0); i+=2) {
+		mvaddstr(y, x0 + i, "^#");
 		if (D > 0) {
 			y = y + yi;
 			D += (2 * (dy - dx));
@@ -135,12 +167,12 @@ void plotLineLow(int x0, int y0, int x1, int y1) {
 
 void plotLineHigh(int x0, int y0, int x1, int y1) {
 
-	int dx = x1 - x0;
+	int dx = 2*(x1 - x0);
 	int dy = y1 - y0;
-	int xi = 1;
+	int xi = 2;
 	
 	if (dx < 0) {
-		xi = -1;
+		xi = -2;
 		dx = -dx;
 	}
 
@@ -148,7 +180,7 @@ void plotLineHigh(int x0, int y0, int x1, int y1) {
 	int x = x0;
 	
 	for (int i = 0; i <= y1 - y0; i++) {
-		mvaddstr(y0 + i, x, "*");
+		mvaddstr(y0 + i, x, "^#");
 		if (D > 0) {
 			x = x + xi;
 			D += (2 * (dx - dy));
