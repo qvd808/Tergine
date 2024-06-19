@@ -21,15 +21,20 @@ int main() {
 		attrset(COLOR_PAIR(1));
 		// draw_right_triangle(0, 0, size, size);
 		// draw_rect(0, 0, size, size);
-		struct Point point1 = {
+		struct Point p1 = {
 			.x = 0,
 			.y = 0
 		};
-		struct Point point2 = {
+		struct Point p2 = {
 			.x = 3,
 			.y = 8 
 		};
-		draw_line(point1, point2);
+		struct Point p3 = {
+			.x = 0,
+			.y = 8 
+		};
+		draw_triangle(p1, p2, p3);
+		// draw_line(p1,p3);
 		refresh();
 
 		num += 1;

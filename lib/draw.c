@@ -1,8 +1,11 @@
 #include "draw.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <curses.h>
 // #include <curses.h>
 // #include <wchar.h>
+
+int draw_line_test(struct Point start, struct Point end);
 
 void draw_rect(int x, int y, int width, int height) {
 
@@ -72,25 +75,36 @@ int draw_line(struct Point start, struct Point end) {
 		return 0;
 	}
 
-	for (int i = 0; i < end.y - start.y; i++) {
-		for (int j = 0; j < end.x - start.x; j++) {
+	draw_line_test(start, end);
 
-			// printw("\xc3\x7f");
-			
-			if (i == j) {
-				mvaddstr(start.y + i, start.x + 2*j, "^#");
-			}
-			// mvaddch(y + i, x + 2*j, cBlock);
-			// addch(A_REVERSE);
+	// for (int i = 0; i < end.y - start.y; i++) {
+	// 	for (int j = 0; j < end.x - start.x; j++) {
+	//
+	// 		// printw("\xc3\x7f");
+	// 		
+	// 		if (i == j) {
+	// 			mvaddstr(start.y + i, start.x + 2*j, "^#");
+	// 		}
+	// 		// mvaddch(y + i, x + 2*j, cBlock);
+	// 		// addch(A_REVERSE);
+	//
+	// 		if (j + start.x >= size.ws_col - 1){
+	// 			break;
+	// 		}
+	// 	}
+	// 	if (i + start.y >= size.ws_row - 1){
+	// 		break;
+	// 	}
+	// }
 
-			if (j + start.x >= size.ws_col - 1){
-				break;
-			}
-		}
-		if (i + start.y >= size.ws_row - 1){
-			break;
-		}
-	}
+	return 1;
+}
+
+int draw_triangle(struct Point p1, struct Point p2, struct Point p3) {
+
+	draw_line(p1, p2);
+	draw_line(p2, p3);
+	draw_line(p3, p1);
 
 	return 1;
 }
@@ -106,16 +120,28 @@ int draw_line_test(struct Point start, struct Point end) {
 	//If end.x - start.x == 0. Vertical line
 	
 	if (end.x - start.x == 0) {
-		for (int i = 0; i < end.y - start.y; i++) {
-			mvaddstr(start.y + i, start.x, "*");
+		int dy;
+		if (end.y - start.y < 0) {
+			dy = -1;
+		} else {
+			dy = 1;
+		}
+		for (int i = 0; i < abs(end.y - start.y); i++) {
+			mvaddstr(start.y + dy*i, start.x, "^#");
 		}
 
 		return 1;
 	}
 	
 	if (end.y - start.y == 0) {
-		for (int i = 0; i < end.x - start.x; i++) {
-			mvaddstr(start.y, start.x + i, "*");
+		// int dx;
+		// if (end.x - start.x < 0) {
+		// 	dx = -2;
+		// } else {
+		// 	dx = 2;
+		// }
+		for (int i = 0; i < 2 * abs(end.x - start.x); i++) {
+			mvaddstr(start.y, start.x + 2*i, "^#");
 		}
 		return 1;
 	}

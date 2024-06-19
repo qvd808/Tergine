@@ -19,5 +19,6 @@ void plotLineHigh(int x0, int y0, int x1, int y1);
 void draw_rect(int x, int y, int width, int height);
 void draw_right_triangle(int x, int y, int width, int height);
 int draw_line(struct Point start, struct Point end);
+int draw_triangle(struct Point p1, struct Point p2, struct Point p3);
 
 #endif
