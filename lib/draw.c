@@ -133,6 +133,7 @@ int draw_line_test(struct Point start, struct Point end) {
 		return 1;
 	}
 	
+	//Draw horizontal
 	if (end.y - start.y == 0) {
 		// int dx;
 		// if (end.x - start.x < 0) {
@@ -140,12 +141,13 @@ int draw_line_test(struct Point start, struct Point end) {
 		// } else {
 		// 	dx = 2;
 		// }
-		for (int i = 0; i < 2 * abs(end.x - start.x); i++) {
-			mvaddstr(start.y, start.x + 2*i, "^#");
+		for (int i = 0; i < abs(end.x - start.x); i++) {
+			mvaddstr(start.y, start.x + 2*i , "^#");
 		}
 		return 1;
 	}
 
+	//Draw vertical
 	if (abs(end.y - start.y) < abs(end.x - start.x)) {
 		if (start.x > end.x) {
 			plotLineLow(end.x, end.y, start.x, start.y);

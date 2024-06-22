@@ -37,9 +37,31 @@ int main() {
 		attrset(COLOR_PAIR(1));
 		// draw_right_triangle(0, 0, size, size);
 		// draw_rect(0, 0, size, size);
+		// struct Point p1 = {
+		// 	.x = 8,
+		// 	.y = 8
+		// };
+		// struct Point p2 = {
+		// 	.x = 0,
+		// 	.y = 0
+		// };
+		// struct Point p3 = {
+		// 	.x = 0,
+		// 	.y = 8
+		// };
+		// draw_triangle(p1, p2, p3);
+		// p1.x = 16;
+		// p1.y = 0;
+		// p2.x = 16;
+		// p2.y = 9;
+		// p3.x = 25;
+		// p3.y = 9;
+		//
+		// draw_triangle(p1, p2, p3);
+		//
 		struct Point p1 = {
-			.x = 16,
-			.y = 40
+			.x = 8,
+			.y = 8
 		};
 		struct Point p2 = {
 			.x = 0,
@@ -49,8 +71,10 @@ int main() {
 			.x = 0,
 			.y = 8
 		};
-		draw_triangle(p1, p2, p3);
-		// draw_line(p1,p3);
+		draw_line(p2,p3);
+		draw_line(p1,p3);
+		// attrset(COLOR_PAIR(2));
+		// draw_line(p3,p1);
 		refresh();
 
 		num += 1;
