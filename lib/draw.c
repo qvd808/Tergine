@@ -7,6 +7,7 @@
 
 int draw_line_test(struct Point start, struct Point end);
 
+
 void draw_rect(int x, int y, int width, int height) {
 
 	char cBlock = (char)0x2588;
@@ -75,6 +76,8 @@ int draw_line(struct Point start, struct Point end) {
 		return 0;
 	}
 
+	start.x *= 2;
+	end.x *= 2;
 	draw_line_test(start, end);
 
 	// for (int i = 0; i < end.y - start.y; i++) {
@@ -117,8 +120,8 @@ int draw_line_test(struct Point start, struct Point end) {
 		return 0;
 	}
 
-	//If end.x - start.x == 0. Vertical line
 	
+	// //Draw vertical
 	if (end.x - start.x == 0) {
 		int dy;
 		if (end.y - start.y < 0) {
@@ -135,19 +138,18 @@ int draw_line_test(struct Point start, struct Point end) {
 	
 	//Draw horizontal
 	if (end.y - start.y == 0) {
-		// int dx;
-		// if (end.x - start.x < 0) {
-		// 	dx = -2;
-		// } else {
-		// 	dx = 2;
-		// }
-		for (int i = 0; i < abs(end.x - start.x); i++) {
-			mvaddstr(start.y, start.x + 2*i , "^#");
+		int dx;
+		if (end.x - start.x < 0) {
+			dx = -1;
+		} else {
+			dx = 1;
+		}
+		for (int i = 0; i < abs(end.x - start.x); i+=2) {
+			mvaddstr(start.y, start.x + dx*i , "^#");
 		}
 		return 1;
 	}
 
-	//Draw vertical
 	if (abs(end.y - start.y) < abs(end.x - start.x)) {
 		if (start.x > end.x) {
 			plotLineLow(end.x, end.y, start.x, start.y);
@@ -170,7 +172,7 @@ int draw_line_test(struct Point start, struct Point end) {
 	// Bresenhams's line algorithm or Xiaolin Wu's Line algorithm
 void plotLineLow(int x0, int y0, int x1, int y1) {
 
-	int dx = 2*(x1 - x0);
+	int dx = (x1 - x0);
 	int dy = y1 - y0;
 	int yi = 1;
 	
@@ -182,7 +184,7 @@ void plotLineLow(int x0, int y0, int x1, int y1) {
 	int D = (2 * dy ) - dx;
 	int y = y0;
 	
-	for (int i = 0; i <= 2*(x1 - x0); i+=2) {
+	for (int i = 0; i <= (x1 - x0); i+=1) {
 		mvaddstr(y, x0 + i, "^#");
 		if (D > 0) {
 			y = y + yi;
@@ -195,7 +197,7 @@ void plotLineLow(int x0, int y0, int x1, int y1) {
 
 void plotLineHigh(int x0, int y0, int x1, int y1) {
 
-	int dx = 2*(x1 - x0);
+	int dx = (x1 - x0);
 	int dy = y1 - y0;
 	int xi = 2;
 	
@@ -211,9 +213,9 @@ void plotLineHigh(int x0, int y0, int x1, int y1) {
 		mvaddstr(y0 + i, x, "^#");
 		if (D > 0) {
 			x = x + xi;
-			D += (2 * (dx - dy));
+			D += ((dx - dy));
 		} else {
-			D += 2 * dx;
+			D += dx;
 		}
 	}
 }
