@@ -49,7 +49,7 @@ int main() {
 			.x = 0,
 			.y = 8
 		};
-		draw_triangle(p1, p2, p3);
+		// draw_triangle(p1, p2, p3);
 		p1.x = 9;
 		p1.y = 0;
 		p2.x = 9;
@@ -57,8 +57,21 @@ int main() {
 		p3.x = 18;
 		p3.y = 9;
 
-		draw_triangle(p1, p2, p3);
+		// draw_triangle(p1, p2, p3);
 
+		// int width = getWinWidth();
+		// int height = getWinHeight();
+		//
+		// p1.x = 10;
+		// p1.y = 10;
+		// p2.x = 10;
+		// p2.y = height - 1;
+		// p3.x = width - 2;
+		// p3.y = height - 1;
+		// draw_line(p1, p2);
+		// draw_line(p2, p3);
+
+		// draw_triangle(p1, p2, p3);
 		// struct Point p1 = {
 		// 	.x = 8,
 		// 	.y = 8

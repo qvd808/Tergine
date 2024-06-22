@@ -11,5 +11,7 @@
 // #include <unistd.h>
 
 void init_program(void);
+int getWinHeight(void);
+int getWinWidth(void);
 
 #endif

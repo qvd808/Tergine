@@ -22,3 +22,23 @@ void init_program(void) {
 		init_pair(7, COLOR_WHITE, COLOR_BLACK);
 	}
 }
+
+int getWinHeight(void) {
+
+	struct winsize size;
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) < 0) {
+		printf("TIOCGWINSZ error!\n");
+	}
+
+	return size.ws_row;
+}
+
+int getWinWidth(void) {
+
+	struct winsize size;
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) < 0) {
+		printf("TIOCGWINSZ error!\n");
+	}
+
+	return size.ws_col / 2;
+}
