@@ -16,83 +16,77 @@ struct Point3d {
 	float z;
 };
 
-struct Cube {
-	struct Point3d p1;
-	struct Point3d p2;
-	struct Point3d p3;
-	struct Point3d p4;
-	struct Point3d p5;
-	struct Point3d p6;
-};
 
+struct Cube {
+	struct Point3d p[8];
+};
 
 int main() {
 
 	signal(SIGINT, exit_program_handler);
 	init_program();
 
-	int size = 10;
-	int num = 0;
+
+	struct Point3d p1 = {
+		.x = 0,
+		.y = 0,
+		.z = 0
+	};
+	struct Point3d p2 = {
+		.x = 1,
+		.y = 0,
+		.z = 0
+	};
+	struct Point3d p3 = {
+		.x = 0,
+		.y = 1,
+		.z = 0
+	};
+	struct Point3d p4 = {
+		.x = 0,
+		.y = 0,
+		.z = 1
+	};
+	struct Point3d p5 = {
+		.x = 1,
+		.y = 0,
+		.z = 1
+	};
+	struct Point3d p6 = {
+		.x = 1,
+		.y = 1,
+		.z = 0
+	};
+	struct Point3d p7 = {
+		.x = 1,
+		.y = 1,
+		.z = 1
+	};
+	struct Point3d p8 = {
+		.x = 0,
+		.y = 1,
+		.z = 1
+	};
+
+	struct Cube cube;
+	cube.p[0] = p1;
+	cube.p[1] = p2;
+	cube.p[2] = p3;
+	cube.p[3] = p4;
+	cube.p[4] = p5;
+	cube.p[5] = p6;
+	cube.p[6] = p7;
+	cube.p[7] = p8;
+	
 	while (running) {
 		attrset(COLOR_PAIR(1));
-		// draw_right_triangle(0, 0, size, size);
-		// draw_rect(0, 0, size, size);
-		struct Point p1 = {
-			.x = 8,
-			.y = 8
-		};
-		struct Point p2 = {
-			.x = 0,
-			.y = 0
-		};
-		struct Point p3 = {
-			.x = 0,
-			.y = 8
-		};
-		// draw_triangle(p1, p2, p3);
-		p1.x = 9;
-		p1.y = 0;
-		p2.x = 9;
-		p2.y = 9;
-		p3.x = 18;
-		p3.y = 9;
 
-		// draw_triangle(p1, p2, p3);
+		struct Point p1 = translate_coordinate(cube.p[0].x, cube.p[0].y);
+		struct Point p2 = translate_coordinate(cube.p[1].x, cube.p[1].y);
 
-		// int width = getWinWidth();
-		// int height = getWinHeight();
-		//
-		// p1.x = 10;
-		// p1.y = 10;
-		// p2.x = 10;
-		// p2.y = height - 1;
-		// p3.x = width - 2;
-		// p3.y = height - 1;
-		// draw_line(p1, p2);
-		// draw_line(p2, p3);
+		draw_line(p1, p2);
 
-		// draw_triangle(p1, p2, p3);
-		// struct Point p1 = {
-		// 	.x = 8,
-		// 	.y = 8
-		// };
-		// struct Point p2 = {
-		// 	.x = 0,
-		// 	.y = 0
-		// };
-		// struct Point p3 = {
-		// 	.x = 0,
-		// 	.y = 8
-		// };
-		// draw_line(p2,p3);
-		// draw_line(p1,p3);
-		// attrset(COLOR_PAIR(2));
-		// draw_line(p3,p1);
 		refresh();
-
-		num += 1;
-		num %= 36;
-
 		// erase();
 		usleep(100000);
 	}

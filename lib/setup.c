@@ -42,3 +42,18 @@ int getWinWidth(void) {
 
 	return size.ws_col / 2;
 }
+
+struct Point translate_coordinate(float x, float y) {
+
+	int width = getWinWidth();
+	int height = getWinHeight();
+	int x_new = (width * (x + 1)) / 2;
+	int y_new = (height * (y + 1)) / 2;
+
+	struct Point res = {
+		.x = x_new,
+		.y = y_new,
+	};
+
+	return res;
+}

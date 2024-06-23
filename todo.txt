@@ -1,7 +1,3 @@
-(9, 0) -> (16, 0)
-(9, 9) -> (16, 9)
-(9 + 9, 9) -> (16 + 9, 9)
-
-convert all the coordinates on y = 2x system to y = x system
-
-When you draw you include the pixel at the last so the side has more length. For example, (0, 0) -> (0, 8) should have eight length but draw a pixel at (0, 8) so there are 9 pixels in total
+0 -> w/2
++1 -> w
+-1 -> 0
