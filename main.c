@@ -22,9 +22,21 @@ struct Cube {
 	struct Point3d p[8];
 };
 
-struct mat4x4 {
-	float m[4][4];
-};
+typedef float vec4d[4];
+typedef float mat4x4[4][4];
+
+void MultiplyMatrixVector(vec4d *input, vec4d *output, mat4x4 *m) {
+	(*output)[0] = (*input)[0] * (*m)[0][0] + (*input)[1] * (*m)[1][0] + (*input)[2] * (*m)[2][0] + (*m)[3][0];
+	(*output)[1] = (*input)[0] * (*m)[0][1] + (*input)[1] * (*m)[1][1] + (*input)[2] * (*m)[2][1] + (*m)[3][1];
+	(*output)[2] = (*input)[0] * (*m)[0][2] + (*input)[1] * (*m)[1][2] + (*input)[2] * (*m)[2][2] + (*m)[3][2];
+	(*output)[3] = (*input)[0] * (*m)[0][3] + (*input)[1] * (*m)[1][3] + (*input)[2] * (*m)[2][3] + (*m)[3][3];
+
+	if ((*output)[3] !=  0.0f) {
+		(*output)[0] /= (*output)[3];
+		(*output)[1] /= (*output)[3];
+		(*output)[2] /= (*output)[3];
+	}
+}
 
 int main() {
 
@@ -91,6 +103,16 @@ int main() {
 	float fFov = 90.0f;
 	float fAspectRatio = getAspectRatio();
 	float fFovRad = 1.0f / tan(fFov * 0.5 / 180.0f * 3.14159f);
+
+	mat4x4 matProj = {0};
+	matProj[0][0] = fAspectRatio * fFovRad;
+	matProj[1][1] = fFovRad;
+	matProj[2][2] = fFar / (fFar - fNear);
+	matProj[3][2] = (-fFar * fNear) / (fFar - fNear);
+	matProj[2][3] = 1.0f;
+	matProj[3][3] = 0.0f;
+
+	
 	
 	while (running) {
 		attrset(COLOR_PAIR(1));
