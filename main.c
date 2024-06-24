@@ -1,3 +1,4 @@
+#include <math.h>
 #include <signal.h>
 // #include <stdlib.h>
 #include "draw.h"
@@ -21,12 +22,16 @@ struct Cube {
 	struct Point3d p[8];
 };
 
+struct mat4x4 {
+	float m[4][4];
+};
+
 int main() {
 
 	signal(SIGINT, exit_program_handler);
 	init_program();
 
-
+	// Initialize Points
 	struct Point3d p1 = {
 		.x = 0,
 		.y = 0,
@@ -68,6 +73,7 @@ int main() {
 		.z = 1
 	};
 
+	//Initialize the cube in space
 	struct Cube cube;
 	cube.p[0] = p1;
 	cube.p[1] = p2;
@@ -77,6 +83,14 @@ int main() {
 	cube.p[5] = p6;
 	cube.p[6] = p7;
 	cube.p[7] = p8;
+
+
+	// Projection Matrix
+	float fNear = 0.1f;
+	float fFar = 1000.0f;
+	float fFov = 90.0f;
+	float fAspectRatio = getAspectRatio();
+	float fFovRad = 1.0f / tan(fFov * 0.5 / 180.0f * 3.14159f);
 	
 	while (running) {
 		attrset(COLOR_PAIR(1));

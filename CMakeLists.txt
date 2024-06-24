@@ -18,10 +18,17 @@ link_libraries(${CMAKE_SOURCE_DIR}/lib)
 	# set(CURSES_USE_NCURSES TRUE)
 # endif()
 
+#Include NCURSE Package
 set(CURSES_NEED_WIDE TRUE)
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIRS})
 
+#Include the MATH LIBRARY
+find_library(MATH_LIBRARY m REQUIRED)
+
 #Build an exuctable
 add_executable(Tergine main.c lib/draw.c lib/setup.c)
-target_link_libraries(Tergine ${CURSES_LIBRARIES})
+
+#Linked Library
+target_link_libraries(Tergine ${CURSES_LIBRARIES} ${MATH_LIBRARY})
+

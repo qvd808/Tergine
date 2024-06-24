@@ -15,5 +15,6 @@ void init_program(void);
 int getWinHeight(void);
 int getWinWidth(void);
 struct Point translate_coordinate(float x, float y);
+float getAspectRatio();
 
 #endif

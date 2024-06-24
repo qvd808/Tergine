@@ -57,3 +57,10 @@ struct Point translate_coordinate(float x, float y) {
 
 	return res;
 }
+
+float getAspectRatio() {
+	float w = (float) getWinWidth();
+	float h = (float) getWinHeight();
+
+	return h/w;
+}
