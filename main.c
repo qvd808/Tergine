@@ -100,14 +100,41 @@ int main() {
 	matProj[2][3] = 1.0f;
 	matProj[3][3] = 0.0f;
 
+	//Control rotation
+	mat4x4 matRotZ = {0};
+	mat4x4 matRotX = {0};
+
+	float fTheta = 0;
+	float fElapsedTime = 0.01;
+
 	
+	float test = 0;
 	
 	while (running) {
 		attrset(COLOR_PAIR(1));
 
+		fTheta += 1.0f * fElapsedTime;
+		matRotZ[0][0] = cosf(fTheta);
+		matRotZ[0][1] = sinf(fTheta);
+		matRotZ[1][0] = -sinf(fTheta);
+		matRotZ[1][1] = cosf(fTheta);
+		matRotZ[2][2] = 1;
+		matRotZ[3][3] = 1;
+
+		matRotX[0][0] = 1;
+		matRotX[1][1] = cosf(fTheta * 0.5f);
+		matRotX[1][2] = sinf(fTheta * 0.5f);
+		matRotX[2][1] = -sinf(fTheta * 0.5f);
+		matRotX[2][2] = cosf(fTheta * 0.5f);
+		matRotX[3][3] = 1;
+
 		for (int i = 0; i < 12; i++) {
 
 			vec4d triProjected[3];
+			vec4d triRotatedZ[3] = {0};
+			vec4d triRotatedZX[3] = {0};
+
+			struct Point3d triTranslated[3];
 
 			for (int j = 0; j < 3; j++) {
 
@@ -116,8 +143,51 @@ int main() {
 				temp[1] = list_points[i][j].y;
 				temp[2] = list_points[i][j].z;
 
+				MultiplyMatrixVector(&temp, &triRotatedZ[j], &matRotZ);
+			}
+
+			
+
+			for (int j = 0; j < 3; j++) {
+
+				MultiplyMatrixVector(&triRotatedZ[j], &triRotatedZX[j], &matRotX);
+			}
+
+
+
+			triTranslated[0].x = triRotatedZX[0][0];
+			triTranslated[0].y = triRotatedZX[0][1];
+			triTranslated[0].z = triRotatedZX[0][2] + 3.5f;
+
+			triTranslated[1].x = triRotatedZX[1][0];
+			triTranslated[1].y = triRotatedZX[1][1];
+			triTranslated[1].z = triRotatedZX[1][2] + 3.5f;
+
+			triTranslated[2].x = triRotatedZX[2][0];
+			triTranslated[2].y = triRotatedZX[2][1];
+			triTranslated[2].z = triRotatedZX[2][2] + 3.5f;
+
+			// printw("%fd", triTranslated[0].x);
+
+			for (int j = 0; j < 3; j++) {
+
+				vec4d temp = {0};
+				temp[0] = triTranslated[j].x;
+				temp[1] = triTranslated[j].y;
+				temp[2] = triTranslated[j].z;
+
 				MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
 			}
+
+			// for (int j = 0; j < 3; j++) {
+			//
+			// 	vec4d temp = {0};
+			// 	temp[0] = list_points[i][j].x;
+			// 	temp[1] = list_points[i][j].y;
+			// 	temp[2] = list_points[i][j].z;
+			//
+			// 	MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
+			// }
 
 			struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
 			struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
@@ -128,8 +198,8 @@ int main() {
 		}
 
 		refresh();
-		// erase();
-		usleep(100000);
+		erase();
+		usleep(10000);
 	}
 
 	endwin();

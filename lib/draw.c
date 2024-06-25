@@ -130,7 +130,7 @@ int draw_line_test(struct Point start, struct Point end) {
 			dy = 1;
 		}
 		for (int i = 0; i < abs(end.y - start.y); i++) {
-			mvaddstr(start.y + dy*i, start.x, "^#");
+			mvaddstr(start.y + dy*i, start.x, ";;");
 		}
 
 		return 1;
@@ -145,7 +145,7 @@ int draw_line_test(struct Point start, struct Point end) {
 			dx = 1;
 		}
 		for (int i = 0; i < abs(end.x - start.x); i+=2) {
-			mvaddstr(start.y, start.x + dx*i , "^#");
+			mvaddstr(start.y, start.x + dx*i , ";;");
 		}
 		return 1;
 	}
@@ -185,7 +185,7 @@ void plotLineLow(int x0, int y0, int x1, int y1) {
 	int y = y0;
 	
 	for (int i = 0; i <= (x1 - x0); i+=1) {
-		mvaddstr(y, x0 + i, "^#");
+		mvaddstr(y, x0 + i, ".;");
 		if (D > 0) {
 			y = y + yi;
 			D += (2 * (dy - dx));
@@ -210,7 +210,7 @@ void plotLineHigh(int x0, int y0, int x1, int y1) {
 	int x = x0;
 	
 	for (int i = 0; i <= y1 - y0; i++) {
-		mvaddstr(y0 + i, x, "^#");
+		mvaddstr(y0 + i, x, ".;");
 		if (D > 0) {
 			x = x + xi;
 			D += ((dx - dy));
