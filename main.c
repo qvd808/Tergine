@@ -128,7 +128,8 @@ int main() {
 		matRotX[2][2] = cosf(fTheta * 0.5f);
 		matRotX[3][3] = 1;
 
-		for (int i = 0; i < 12; i++) {
+		int i = 0;
+		// for (int i = 0; i < 12; i++) {
 
 			vec4d triProjected[3];
 			vec4d triRotatedZ[3] = {0};
@@ -195,11 +196,12 @@ int main() {
 
 			draw_triangle(projected_p1, projected_p2, projected_p3);
 
-		}
+		// }
 
 		refresh();
 		erase();
-		usleep(10000);
+		// usleep(10000);
+		usleep(100000);
 	}
 
 	endwin();
