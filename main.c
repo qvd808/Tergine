@@ -1,3 +1,4 @@
+#include <curses.h>
 #include <math.h>
 #include <signal.h>
 // #include <stdlib.h>
@@ -12,14 +13,15 @@ int running = 1;
 void exit_program_handler(int n);
 
 struct Point3d {
-	float x;
-	float y;
-	float z;
+	float x, y, z;
 };
 
+struct Triangle{
+	struct Point3d vec[3];
+};
 
 struct Cube {
-	struct Point3d p[8];
+	struct Triangle mesh[12];
 };
 
 typedef float vec4d[4];
@@ -43,59 +45,45 @@ int main() {
 	signal(SIGINT, exit_program_handler);
 	init_program();
 
-	// Initialize Points
-	struct Point3d p1 = {
-		.x = 0,
-		.y = 0,
-		.z = 0
-	};
-	struct Point3d p2 = {
-		.x = 1,
-		.y = 0,
-		.z = 0
-	};
-	struct Point3d p3 = {
-		.x = 0,
-		.y = 1,
-		.z = 0
-	};
-	struct Point3d p4 = {
-		.x = 0,
-		.y = 0,
-		.z = 1
-	};
-	struct Point3d p5 = {
-		.x = 1,
-		.y = 0,
-		.z = 1
-	};
-	struct Point3d p6 = {
-		.x = 1,
-		.y = 1,
-		.z = 0
-	};
-	struct Point3d p7 = {
-		.x = 1,
-		.y = 1,
-		.z = 1
-	};
-	struct Point3d p8 = {
-		.x = 0,
-		.y = 1,
-		.z = 1
-	};
-
 	//Initialize the cube in space
 	struct Cube cube;
-	cube.p[0] = p1;
-	cube.p[1] = p2;
-	cube.p[2] = p3;
-	cube.p[3] = p4;
-	cube.p[4] = p5;
-	cube.p[5] = p6;
-	cube.p[6] = p7;
-	cube.p[7] = p8;
+	// SOUTH
+	struct Point3d tri1[3] = {{0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}};
+	struct Point3d tri2[3] = {{0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}};
 
+	// EAST
+	struct Point3d tri3[3] = {{1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}};
+	struct Point3d tri4[3] = {{1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 1.0f}};
+
+	//NORTH
+	struct Point3d tri5[3] = {{1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 1.0f}};
+	struct Point3d tri6[3] = {{1.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}};
+
+	// WEST
+	struct Point3d tri7[3] = {{0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 1.0f}, {1.0f, 1.0f, 1.0f}};
+	struct Point3d tri8[3] = {{0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f}};
+
+	// TOP
+	struct Point3d tri9[3] = {{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 1.0f}, {1.0f, 1.0f, 1.0f}};
+	struct Point3d tri10[3] = {{0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}};
+
+	//BOTTOM
+	struct Point3d tri11[3] = {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}};
+	struct Point3d tri12[3] = {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}};
+
+	struct Point3d *list_points[12];
+	list_points[0] = tri1;
+	list_points[1] = tri2;
+	list_points[2] = tri3;
+	list_points[3] = tri4;
+	list_points[4] = tri5;
+	list_points[5] = tri6;
+	list_points[6] = tri7;
+	list_points[7] = tri8;
+	list_points[8] = tri9;
+	list_points[9] = tri10;
+	list_points[10] = tri11;
+	list_points[11] = tri12;
 
 	// Projection Matrix
 	float fNear = 0.1f;
@@ -117,10 +105,27 @@ int main() {
 	while (running) {
 		attrset(COLOR_PAIR(1));
 
-		struct Point p1 = translate_coordinate(cube.p[0].x, cube.p[0].y);
-		struct Point p2 = translate_coordinate(cube.p[1].x, cube.p[1].y);
+		for (int i = 0; i < 12; i++) {
 
-		draw_line(p1, p2);
+			vec4d triProjected[3];
+
+			for (int j = 0; j < 3; j++) {
+
+				vec4d temp = {0};
+				temp[0] = list_points[i][j].x;
+				temp[1] = list_points[i][j].y;
+				temp[2] = list_points[i][j].z;
+
+				MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
+			}
+
+			struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
+			struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
+			struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
+
+			draw_triangle(projected_p1, projected_p2, projected_p3);
+
+		}
 
 		refresh();
 		// erase();
