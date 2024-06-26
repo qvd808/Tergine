@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <curses.h>
-// #include <curses.h>
-// #include <wchar.h>
 
 int draw_line_test(struct Point start, struct Point end);
 
@@ -130,7 +128,7 @@ int draw_line_test(struct Point start, struct Point end) {
 			dy = 1;
 		}
 		for (int i = 0; i < abs(end.y - start.y); i++) {
-			mvaddstr(start.y + dy*i, start.x, "| ");
+			mvaddstr(start.y + dy*i, start.x, "*");
 		}
 
 		return 1;
@@ -145,7 +143,7 @@ int draw_line_test(struct Point start, struct Point end) {
 			dx = 1;
 		}
 		for (int i = 0; i < abs(end.x - start.x); i+=2) {
-			mvaddstr(start.y, start.x + dx*i , "--");
+			mvaddstr(start.y, start.x + dx*i , "*");
 		}
 		return 1;
 	}

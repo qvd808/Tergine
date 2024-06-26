@@ -135,7 +135,7 @@ int main() {
 		int height = getWinHeight();
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++){
-				mvaddstr(j,i, ".");
+				mvaddstr(j,i, "`");
 
 			}
 		}
@@ -199,7 +199,7 @@ int main() {
 
 		refresh();
 		erase();
-		usleep(10000);
+		usleep(5000);
 		// usleep(100000);
 	}
 
