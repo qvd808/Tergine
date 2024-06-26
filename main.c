@@ -113,6 +113,7 @@ int main() {
 	while (running) {
 		attrset(COLOR_PAIR(1));
 
+		// fTheta = 3.3;
 		fTheta += 1.0f * fElapsedTime;
 		matRotZ[0][0] = cosf(fTheta);
 		matRotZ[0][1] = sinf(fTheta);
@@ -129,13 +130,18 @@ int main() {
 		matRotX[3][3] = 1;
 
 		int i = 0;
-		// for (int i = 0; i < 12; i++) {
+		float translateZ = 30.0f;
+		for (int i = 0; i < 12; i++) {
+
 
 			vec4d triProjected[3];
 			vec4d triRotatedZ[3] = {0};
 			vec4d triRotatedZX[3] = {0};
 
 			struct Point3d triTranslated[3];
+
+			// move(0, 0);
+			// printw("%f", fTheta);
 
 			for (int j = 0; j < 3; j++) {
 
@@ -147,26 +153,22 @@ int main() {
 				MultiplyMatrixVector(&temp, &triRotatedZ[j], &matRotZ);
 			}
 
-			
-
 			for (int j = 0; j < 3; j++) {
 
 				MultiplyMatrixVector(&triRotatedZ[j], &triRotatedZX[j], &matRotX);
 			}
 
-
-
 			triTranslated[0].x = triRotatedZX[0][0];
 			triTranslated[0].y = triRotatedZX[0][1];
-			triTranslated[0].z = triRotatedZX[0][2] + 3.5f;
+			triTranslated[0].z = triRotatedZX[0][2] + translateZ;
 
 			triTranslated[1].x = triRotatedZX[1][0];
 			triTranslated[1].y = triRotatedZX[1][1];
-			triTranslated[1].z = triRotatedZX[1][2] + 3.5f;
+			triTranslated[1].z = triRotatedZX[1][2] + translateZ;
 
 			triTranslated[2].x = triRotatedZX[2][0];
 			triTranslated[2].y = triRotatedZX[2][1];
-			triTranslated[2].z = triRotatedZX[2][2] + 3.5f;
+			triTranslated[2].z = triRotatedZX[2][2] + translateZ;
 
 			// printw("%fd", triTranslated[0].x);
 
@@ -180,28 +182,20 @@ int main() {
 				MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
 			}
 
-			// for (int j = 0; j < 3; j++) {
-			//
-			// 	vec4d temp = {0};
-			// 	temp[0] = list_points[i][j].x;
-			// 	temp[1] = list_points[i][j].y;
-			// 	temp[2] = list_points[i][j].z;
-			//
-			// 	MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
-			// }
-
 			struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
 			struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
 			struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
+			move(0, 0);
+			printw("%f", triProjected[2][3]);
 
 			draw_triangle(projected_p1, projected_p2, projected_p3);
 
-		// }
+		}
 
 		refresh();
 		erase();
-		// usleep(10000);
-		usleep(100000);
+		usleep(10000);
+		// usleep(100000);
 	}
 
 	endwin();
