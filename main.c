@@ -111,7 +111,8 @@ int main() {
 	float test = 0;
 	
 	while (running) {
-		attrset(COLOR_PAIR(1));
+		// init_color(255, 255, 255, 0);
+		attrset(COLOR_PAIR(7));
 
 		// fTheta = 3.3;
 		fTheta += 1.0f * fElapsedTime;
@@ -129,19 +130,25 @@ int main() {
 		matRotX[2][2] = cosf(fTheta * 0.5f);
 		matRotX[3][3] = 1;
 
-		int i = 0;
-		float translateZ = 30.0f;
-		for (int i = 0; i < 12; i++) {
 
+		int width = getWinWidth() * 2;
+		int height = getWinHeight();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++){
+				mvaddstr(j,i, ".");
+
+			}
+		}
+
+		int i = 0;
+		float translateZ = 3.0f;
+		for (int i = 0; i < 12; i++) {
 
 			vec4d triProjected[3];
 			vec4d triRotatedZ[3] = {0};
 			vec4d triRotatedZX[3] = {0};
 
 			struct Point3d triTranslated[3];
-
-			// move(0, 0);
-			// printw("%f", fTheta);
 
 			for (int j = 0; j < 3; j++) {
 
@@ -185,8 +192,6 @@ int main() {
 			struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
 			struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
 			struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
-			move(0, 0);
-			printw("%f", triProjected[2][3]);
 
 			draw_triangle(projected_p1, projected_p2, projected_p3);
 
