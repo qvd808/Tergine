@@ -4,6 +4,7 @@
 // #include <stdlib.h>
 #include "draw.h"
 #include "setup.h"
+#include "util.h"
 #include <ncurses.h>
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
@@ -24,8 +25,6 @@ struct Cube {
 	struct Triangle mesh[12];
 };
 
-typedef float vec4d[4];
-typedef float mat4x4[4][4];
 
 void MultiplyMatrixVector(vec4d *input, vec4d *output, mat4x4 *m) {
 	(*output)[0] = (*input)[0] * (*m)[0][0] + (*input)[1] * (*m)[1][0] + (*input)[2] * (*m)[2][0] + (*m)[3][0];
