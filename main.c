@@ -1,6 +1,7 @@
 #include <curses.h>
 #include <math.h>
 #include <signal.h>
+#include <stdbool.h>
 // #include <stdlib.h>
 #include "draw.h"
 #include "setup.h"
@@ -188,18 +189,26 @@ int main() {
 				MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
 			}
 
-			struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
-			struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
-			struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
-
-			draw_triangle(projected_p1, projected_p2, projected_p3);
+			bool should_draw = false;
+			float normal[3] = {0};
+			cross_product(triProjected, normal);
+			if (normal[2] < 0) {
+				should_draw = true;
+			}
+			
+			if (should_draw) {
+				struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
+				struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
+				struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
+				draw_triangle(projected_p1, projected_p2, projected_p3);
+			}
 
 		}
 
 		refresh();
 		erase();
-		usleep(5000);
-		// usleep(100000);
+		// usleep(5000);
+		usleep(100000);
 	}
 
 	endwin();

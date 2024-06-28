@@ -27,7 +27,7 @@ include_directories(${CURSES_INCLUDE_DIRS})
 find_library(MATH_LIBRARY m REQUIRED)
 
 #Build an exuctable
-add_executable(Tergine main.c lib/draw.c lib/setup.c)
+add_executable(Tergine main.c lib/draw.c lib/setup.c lib/util.c)
 
 #Linked Library
 target_link_libraries(Tergine ${CURSES_LIBRARIES} ${MATH_LIBRARY})
