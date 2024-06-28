@@ -1,17 +1,32 @@
 #include "util.h"
+#include <curses.h>
 #include <math.h>
 
 
-void cross_product(vec4d *v1, float output[]){
+void cross_product(struct Point3d *tri, vec4d *output){
 
-	// Extract and calculate magnitude
-	float temp1[3] = {v1[1][0] - v1[0][0], v1[1][1] - v1[0][1], v1[1][2] - v1[0][2] };
-	float temp2[3] = {v1[2][0] - v1[0][0], v1[2][1] - v1[0][1], v1[2][2] - v1[0][2] };
+	vec4d temp1 = {0};
+	temp1[0] = tri[1].x - tri[0].x;
+	temp1[1] = tri[1].y - tri[0].y;
+	temp1[2] = tri[1].z - tri[0].z;
 
-	// Calculate the cross product using magnitude
-	output[0] = temp1[1] * temp2[2] - temp1[2] * temp2[1];
-	output[1] = temp1[2] * temp2[0] - temp1[0] * temp2[2];
-	output[2] = temp1[0] * temp2[1] - temp1[1] * temp2[0];
+	vec4d temp2 = {0};
+	temp2[0] = tri[2].x - tri[0].x;
+	temp2[1] = tri[2].y - tri[0].y;
+	temp2[2] = tri[2].z - tri[0].z;
+	
+
+	(*output)[0] = temp1[1] * temp2[2] - temp1[2] * temp2[1];
+	(*output)[1] = temp1[2] * temp2[0] - temp1[0] * temp2[2];
+	(*output)[2] = temp1[0] * temp2[1] - temp1[1] * temp2[0];
+
+	// printw("%f", temp2[2]);
+
+	float l = sqrtf((*output)[0] * (*output)[0] + (*output)[1] * (*output)[1] + (*output)[2] * (*output)[2]);
+	(*output)[0] /= l;
+	(*output)[1] /= l;
+	(*output)[2] /= l;
+
 }
 
 

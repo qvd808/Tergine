@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <curses.h>
 #include <math.h>
 #include <signal.h>
@@ -14,9 +15,6 @@
 int running = 1;
 void exit_program_handler(int n);
 
-struct Point3d {
-	float x, y, z;
-};
 
 struct Triangle{
 	struct Point3d vec[3];
@@ -106,6 +104,7 @@ int main() {
 
 	float fTheta = 0;
 	float fElapsedTime = 0.01;
+	vec4d CAMERA = {0};
 
 	
 	float test = 0;
@@ -141,7 +140,7 @@ int main() {
 		}
 
 		int i = 0;
-		float translateZ = 3.0f;
+		float translateZ = 2.5f;
 		for (int i = 0; i < 12; i++) {
 
 			vec4d triProjected[3];
@@ -177,39 +176,52 @@ int main() {
 			triTranslated[2].y = triRotatedZX[2][1];
 			triTranslated[2].z = triRotatedZX[2][2] + translateZ;
 
-			// printw("%fd", triTranslated[0].x);
 
-			for (int j = 0; j < 3; j++) {
+			vec4d normal = {0};
+			cross_product((struct Point3d *)&triTranslated, &normal);
+			// move(0, 0);
+			// printw("%f", normal[2]);
 
-				vec4d temp = {0};
-				temp[0] = triTranslated[j].x;
-				temp[1] = triTranslated[j].y;
-				temp[2] = triTranslated[j].z;
+			// if (
+			// 	normal[2] < 0
+			// )
 
-				MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
-			}
+			if (
+				(	normal[0] * (triTranslated[0].x - CAMERA[0]) +
+					normal[1] * (triTranslated[0].y - CAMERA[1]) +
+					normal[2] * (triTranslated[0].z - CAMERA[2])
+				) < 0.0f
+			)
+			{
 
-			bool should_draw = false;
-			float normal[3] = {0};
-			cross_product(triProjected, normal);
-			if (normal[2] < 0) {
-				should_draw = true;
-			}
-			
-			if (should_draw) {
+				for (int j = 0; j < 3; j++) {
+
+					vec4d temp = {0};
+					temp[0] = triTranslated[j].x;
+					temp[1] = triTranslated[j].y;
+					temp[2] = triTranslated[j].z;
+
+					MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
+				}
+
+
 				struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
 				struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
 				struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
 				draw_triangle(projected_p1, projected_p2, projected_p3);
 			}
 
+			// free(normal);
+
 		}
+
 
 		refresh();
 		erase();
-		// usleep(5000);
-		usleep(100000);
+		usleep(5000);
+		// usleep(100000);
 	}
+
 
 	endwin();
 	return 0;
