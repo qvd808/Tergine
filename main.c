@@ -63,7 +63,7 @@ int main() {
 
 	// TOP
 	struct Point3d tri9[3] = {{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 1.0f}, {1.0f, 1.0f, 1.0f}};
-	struct Point3d tri10[3] = {{0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}};
+	struct Point3d tri10[3] = {{0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f, 0.0f}};
 
 	//BOTTOM
 	struct Point3d tri11[3] = {{1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}};
