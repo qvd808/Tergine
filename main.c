@@ -1,9 +1,7 @@
-#include <stdlib.h>
 #include <curses.h>
 #include <math.h>
 #include <signal.h>
 #include <stdbool.h>
-// #include <stdlib.h>
 #include "draw.h"
 #include "setup.h"
 #include "util.h"
@@ -14,7 +12,6 @@
 
 int running = 1;
 void exit_program_handler(int n);
-
 
 struct Triangle{
 	struct Point3d vec[3];
@@ -142,11 +139,6 @@ void spinning_obj(struct Point3d ** list_points, float fTheta, float fElapsedTim
 		// free(normal);
 	}
 
-	refresh();
-	erase();
-	usleep(5000);
-	// usleep(100000);
-	/* } */
 
 }
 
@@ -213,10 +205,14 @@ int main() {
 	matProj[2][3] = 1.0f;
 	matProj[3][3] = 0.0f;
 
-	while (running) {
+	/* while (running) { */
 		fTheta += 1.0f * fElapsedTime;
 		spinning_obj(list_points, fTheta, fElapsedTime, &matProj);
-	}
+
+		refresh();
+		erase();
+		usleep(5000);
+	/* } */
 
 	endwin();
 	return 0;

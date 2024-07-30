@@ -1,6 +1,8 @@
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
+#pragma once
+
 struct Point3d {
 	float x, y, z;
 };

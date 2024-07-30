@@ -1,8 +1,9 @@
 #ifndef _DRAW_H_
 #define _DRAW_H_
 
+#pragma once
+
 #include <curses.h>
-// #include <ncursesw/ncurses.h>
 #include <unistd.h>
 #include <curses.h>
 #include <sys/ioctl.h>
@@ -17,7 +18,6 @@ struct Point {
 	int x;
 	int y;
 };
-
 
 void plotLineLow(int x0, int y0, int x1, int y1);
 void plotLineHigh(int x0, int y0, int x1, int y1);
