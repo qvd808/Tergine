@@ -67,36 +67,12 @@ void draw_right_triangle(int x, int y, int width, int height) {
 }
 
 
-int draw_line(struct Point start, struct Point end) {
-	struct winsize size;
-	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) < 0) {
-		printf("TIOCGWINSZ error!\n");
-		return 0;
-	}
 
-	start.x *= 2;
-	end.x *= 2;
-	draw_line_test(start, end);
+int draw_triangle_fill(struct Point p1, struct Point p2, struct Point p3) {
 
-	// for (int i = 0; i < end.y - start.y; i++) {
-	// 	for (int j = 0; j < end.x - start.x; j++) {
-	//
-	// 		// printw("\xc3\x7f");
-	// 		
-	// 		if (i == j) {
-	// 			mvaddstr(start.y + i, start.x + 2*j, "^#");
-	// 		}
-	// 		// mvaddch(y + i, x + 2*j, cBlock);
-	// 		// addch(A_REVERSE);
-	//
-	// 		if (j + start.x >= size.ws_col - 1){
-	// 			break;
-	// 		}
-	// 	}
-	// 	if (i + start.y >= size.ws_row - 1){
-	// 		break;
-	// 	}
-	// }
+	draw_line(p1, p2);
+	draw_line(p2, p3);
+	draw_line(p3, p1);
 
 	return 1;
 }
@@ -110,15 +86,16 @@ int draw_triangle(struct Point p1, struct Point p2, struct Point p3) {
 	return 1;
 }
 
-int draw_line_test(struct Point start, struct Point end) {
-	
+int draw_line(struct Point start, struct Point end) {
 	struct winsize size;
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) < 0) {
 		printf("TIOCGWINSZ error!\n");
 		return 0;
 	}
 
-	
+	start.x *= 2;
+	end.x *= 2;
+
 	// //Draw vertical
 	if (end.x - start.x == 0) {
 		int dy;
@@ -162,10 +139,8 @@ int draw_line_test(struct Point start, struct Point end) {
 			plotLineHigh(start.x, start.y, end.x, end.y);
 		}
 	}
-
 	return 1;
 }
-
 
 	// Bresenhams's line algorithm or Xiaolin Wu's Line algorithm
 void plotLineLow(int x0, int y0, int x1, int y1) {

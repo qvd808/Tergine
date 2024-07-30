@@ -38,6 +38,118 @@ void MultiplyMatrixVector(vec4d *input, vec4d *output, mat4x4 *m) {
 	}
 }
 
+
+void spinning_obj(struct Point3d ** list_points, float fTheta, float fElapsedTime, mat4x4 *matProj) {
+
+
+	//Control rotation
+	mat4x4 matRotZ = {0};
+	mat4x4 matRotX = {0};
+
+	vec4d CAMERA = {0};
+
+	attrset(COLOR_PAIR(7));
+
+	// fTheta = 3.3;
+	matRotZ[0][0] = cosf(fTheta);
+	matRotZ[0][1] = sinf(fTheta);
+	matRotZ[1][0] = -sinf(fTheta);
+	matRotZ[1][1] = cosf(fTheta);
+	matRotZ[2][2] = 1;
+	matRotZ[3][3] = 1;
+
+	matRotX[0][0] = 1;
+	matRotX[1][1] = cosf(fTheta * 0.5f);
+	matRotX[1][2] = sinf(fTheta * 0.5f);
+	matRotX[2][1] = -sinf(fTheta * 0.5f);
+	matRotX[2][2] = cosf(fTheta * 0.5f);
+	matRotX[3][3] = 1;
+
+
+	int width = getWinWidth() * 2;
+	int height = getWinHeight();
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++){
+			mvaddstr(j,i, "`");
+
+		}
+	}
+
+	float translateZ = 2.5f;
+	for (int i = 0; i < 12; i++) {
+
+		vec4d triProjected[3];
+		vec4d triRotatedZ[3] = {0};
+		vec4d triRotatedZX[3] = {0};
+
+		struct Point3d triTranslated[3];
+
+		for (int j = 0; j < 3; j++) {
+
+			vec4d temp = {0};
+			temp[0] = list_points[i][j].x;
+			temp[1] = list_points[i][j].y;
+			temp[2] = list_points[i][j].z;
+
+			MultiplyMatrixVector(&temp, &triRotatedZ[j], &matRotZ);
+		}
+
+		for (int j = 0; j < 3; j++) {
+
+			MultiplyMatrixVector(&triRotatedZ[j], &triRotatedZX[j], &matRotX);
+		}
+
+		triTranslated[0].x = triRotatedZX[0][0];
+		triTranslated[0].y = triRotatedZX[0][1];
+		triTranslated[0].z = triRotatedZX[0][2] + translateZ;
+
+		triTranslated[1].x = triRotatedZX[1][0];
+		triTranslated[1].y = triRotatedZX[1][1];
+		triTranslated[1].z = triRotatedZX[1][2] + translateZ;
+
+		triTranslated[2].x = triRotatedZX[2][0];
+		triTranslated[2].y = triRotatedZX[2][1];
+		triTranslated[2].z = triRotatedZX[2][2] + translateZ;
+
+
+		vec4d normal = {0};
+		cross_product((struct Point3d *)&triTranslated, &normal);
+
+		if (
+			(	normal[0] * (triTranslated[0].x - CAMERA[0]) +
+				normal[1] * (triTranslated[0].y - CAMERA[1]) +
+				normal[2] * (triTranslated[0].z - CAMERA[2])
+			) < 0.0f
+		)
+		{
+
+			for (int j = 0; j < 3; j++) {
+
+				vec4d temp = {0};
+				temp[0] = triTranslated[j].x;
+				temp[1] = triTranslated[j].y;
+				temp[2] = triTranslated[j].z;
+
+				MultiplyMatrixVector(&temp, &triProjected[j], &(*matProj));
+			}
+
+
+			struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
+			struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
+			struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
+			draw_triangle(projected_p1, projected_p2, projected_p3);
+		}
+		// free(normal);
+	}
+
+	refresh();
+	erase();
+	usleep(5000);
+	// usleep(100000);
+	/* } */
+
+}
+
 int main() {
 
 	signal(SIGINT, exit_program_handler);
@@ -83,6 +195,9 @@ int main() {
 	list_points[10] = tri11;
 	list_points[11] = tri12;
 
+	float fElapsedTime = 0.01;
+	float fTheta = 0;
+
 	// Projection Matrix
 	float fNear = 0.1f;
 	float fFar = 1000.0f;
@@ -98,130 +213,10 @@ int main() {
 	matProj[2][3] = 1.0f;
 	matProj[3][3] = 0.0f;
 
-	//Control rotation
-	mat4x4 matRotZ = {0};
-	mat4x4 matRotX = {0};
-
-	float fTheta = 0;
-	float fElapsedTime = 0.01;
-	vec4d CAMERA = {0};
-
-	
-	float test = 0;
-	
 	while (running) {
-		// init_color(255, 255, 255, 0);
-		attrset(COLOR_PAIR(7));
-
-		// fTheta = 3.3;
 		fTheta += 1.0f * fElapsedTime;
-		matRotZ[0][0] = cosf(fTheta);
-		matRotZ[0][1] = sinf(fTheta);
-		matRotZ[1][0] = -sinf(fTheta);
-		matRotZ[1][1] = cosf(fTheta);
-		matRotZ[2][2] = 1;
-		matRotZ[3][3] = 1;
-
-		matRotX[0][0] = 1;
-		matRotX[1][1] = cosf(fTheta * 0.5f);
-		matRotX[1][2] = sinf(fTheta * 0.5f);
-		matRotX[2][1] = -sinf(fTheta * 0.5f);
-		matRotX[2][2] = cosf(fTheta * 0.5f);
-		matRotX[3][3] = 1;
-
-
-		int width = getWinWidth() * 2;
-		int height = getWinHeight();
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++){
-				mvaddstr(j,i, "`");
-
-			}
-		}
-
-		int i = 0;
-		float translateZ = 2.5f;
-		for (int i = 0; i < 12; i++) {
-
-			vec4d triProjected[3];
-			vec4d triRotatedZ[3] = {0};
-			vec4d triRotatedZX[3] = {0};
-
-			struct Point3d triTranslated[3];
-
-			for (int j = 0; j < 3; j++) {
-
-				vec4d temp = {0};
-				temp[0] = list_points[i][j].x;
-				temp[1] = list_points[i][j].y;
-				temp[2] = list_points[i][j].z;
-
-				MultiplyMatrixVector(&temp, &triRotatedZ[j], &matRotZ);
-			}
-
-			for (int j = 0; j < 3; j++) {
-
-				MultiplyMatrixVector(&triRotatedZ[j], &triRotatedZX[j], &matRotX);
-			}
-
-			triTranslated[0].x = triRotatedZX[0][0];
-			triTranslated[0].y = triRotatedZX[0][1];
-			triTranslated[0].z = triRotatedZX[0][2] + translateZ;
-
-			triTranslated[1].x = triRotatedZX[1][0];
-			triTranslated[1].y = triRotatedZX[1][1];
-			triTranslated[1].z = triRotatedZX[1][2] + translateZ;
-
-			triTranslated[2].x = triRotatedZX[2][0];
-			triTranslated[2].y = triRotatedZX[2][1];
-			triTranslated[2].z = triRotatedZX[2][2] + translateZ;
-
-
-			vec4d normal = {0};
-			cross_product((struct Point3d *)&triTranslated, &normal);
-			// move(0, 0);
-			// printw("%f", normal[2]);
-
-			// if (
-			// 	normal[2] < 0
-			// )
-
-			if (
-				(	normal[0] * (triTranslated[0].x - CAMERA[0]) +
-					normal[1] * (triTranslated[0].y - CAMERA[1]) +
-					normal[2] * (triTranslated[0].z - CAMERA[2])
-				) < 0.0f
-			)
-			{
-
-				for (int j = 0; j < 3; j++) {
-
-					vec4d temp = {0};
-					temp[0] = triTranslated[j].x;
-					temp[1] = triTranslated[j].y;
-					temp[2] = triTranslated[j].z;
-
-					MultiplyMatrixVector(&temp, &triProjected[j], &matProj);
-				}
-
-
-				struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
-				struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
-				struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
-				draw_triangle(projected_p1, projected_p2, projected_p3);
-			}
-
-			// free(normal);
-
-		}
-
-
-		refresh();
-		erase();
-		usleep(5000);
-		// usleep(100000);
+		spinning_obj(list_points, fTheta, fElapsedTime, &matProj);
 	}
-
 
 	endwin();
 	return 0;
