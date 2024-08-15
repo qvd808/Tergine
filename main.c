@@ -45,7 +45,7 @@ void spinning_obj(struct Point3d ** list_points, float fTheta, float fElapsedTim
 
 	vec4d CAMERA = {0};
 
-	attrset(COLOR_PAIR(7));
+	attrset(COLOR_PAIR(0));
 
 	// fTheta = 3.3;
 	matRotZ[0][0] = cosf(fTheta);
@@ -134,7 +134,7 @@ void spinning_obj(struct Point3d ** list_points, float fTheta, float fElapsedTim
 			struct Point projected_p1 = translate_coordinate(triProjected[0][0], triProjected[0][1]);
 			struct Point projected_p2 = translate_coordinate(triProjected[1][0], triProjected[1][1]);
 			struct Point projected_p3 = translate_coordinate(triProjected[2][0], triProjected[2][1]);
-			draw_triangle(projected_p1, projected_p2, projected_p3);
+			draw_triangle_fill(projected_p1, projected_p2, projected_p3);
 		}
 		// free(normal);
 	}
@@ -205,14 +205,37 @@ int main() {
 	matProj[2][3] = 1.0f;
 	matProj[3][3] = 0.0f;
 
-	/* while (running) { */
+	while (running) {
 		fTheta += 1.0f * fElapsedTime;
-		spinning_obj(list_points, fTheta, fElapsedTime, &matProj);
+		/* spinning_obj(list_points, fTheta, fElapsedTime, &matProj); */
+
+		struct Point p1 = {
+			.x = 0,
+			.y = 0,
+		};
+
+		struct Point p2 = {
+			.x = 3,
+			.y = 30,
+		};
+
+		struct Point p3 = {
+			.x = 6,
+			.y = 6,
+		};
+		
+		attrset(COLOR_PAIR(0));
+		draw_line(p1, p2);
+		attrset(COLOR_PAIR(1));
+		/* draw_triangle_fill(p1, p2, p3); */
+		draw_triangle_fill(p2, p1, p3);
+		/* draw_triangle(p1, p2, p3); */
+
 
 		refresh();
 		erase();
 		usleep(5000);
-	/* } */
+	}
 
 	endwin();
 	return 0;

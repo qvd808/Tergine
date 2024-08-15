@@ -70,9 +70,44 @@ void draw_right_triangle(int x, int y, int width, int height) {
 
 int draw_triangle_fill(struct Point p1, struct Point p2, struct Point p3) {
 
-	draw_line(p1, p2);
-	draw_line(p2, p3);
-	draw_line(p3, p1);
+	p1.x *= 2;
+	p2.x *= 2;
+	p3.x *= 2;
+
+
+	int dx1 = p2.x - p1.x;
+	int dy1 = p2.y - p1.y;
+
+	if (abs(dy1) > abs(dx1)) {
+		int xi = 1;
+		int yi = 1;
+		if (dy1 < 0) {
+			yi = -1;
+		}
+		if (dx1 < 0) {
+			xi = -1;
+		}
+		int D = (2*xi*dx1) - yi*dy1;
+		int x = p1.x - 1;
+
+		for (int i = 0; i <= abs(dy1); i++) {
+			mvaddstr(p1.y + yi*i, x, "*");
+			if (D > 0) {
+				x = x + xi;
+				D += dx1*xi - yi*dy1;
+			} else {
+				D += dx1*xi;
+			}
+		}
+
+	}
+
+	attrset(COLOR_PAIR(2));
+	mvaddstr(p1.y, p1.x, "A");
+	attrset(COLOR_PAIR(2));
+	mvaddstr(p2.y, p2.x, "A");
+
+
 
 	return 1;
 }
