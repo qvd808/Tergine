@@ -32,10 +32,13 @@ include_directories(${CURSES_INCLUDE_DIRS})
 
 #Include the MATH LIBRARY
 find_library(MATH_LIBRARY m REQUIRED)
+find_library(CUnit cunit REQUIRED)
 
 #Build an exuctable
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g2")
 add_executable(Tergine main.c lib/draw.c lib/setup.c lib/util.c)
+add_executable(test ./test/test_matrix.c)
 
 #Linked Library
 target_link_libraries(Tergine ${CURSES_LIBRARIES} ${MATH_LIBRARY})
+target_link_libraries(test ${CUnit})

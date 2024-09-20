@@ -45,7 +45,6 @@ void spinning_obj(struct Point3d ** list_points, float fTheta, float fElapsedTim
 
 	vec4d CAMERA = {0};
 
-	attrset(COLOR_PAIR(7));
 
 	// fTheta = 3.3;
 	matRotZ[0][0] = cosf(fTheta);
@@ -206,6 +205,7 @@ int main() {
 	matProj[3][3] = 0.0f;
 
 	while (running) {
+		/* attrset(COLOR_PAIR(3)); */
 		/* fTheta += 1.0f * fElapsedTime; */
 		/* spinning_obj(list_points, fTheta, fElapsedTime, &matProj); */
 
@@ -222,6 +222,9 @@ int main() {
 			.y = 8
 		};
 
+		attrset(COLOR_PAIR(1));
+		draw_line(p1, p2);
+		attrset(COLOR_PAIR(3));
 		draw_triangle_fill(p1, p2, p3);
 
 		refresh();
