@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <curses.h>
-
-int draw_line_test(struct Point start, struct Point end);
-
+#include "util.h"
 
 void draw_rect(int x, int y, int width, int height) {
 
@@ -85,6 +83,45 @@ void test(struct Point p1, struct Point p2) {
 	}
 }
 
+struct PointVector* draw_line_test(struct Point p1, struct Point p2) {
+
+	struct PointVector *res = NULL;
+
+	int dx = abs(p2.x - p1.x);
+	int dy = abs(p2.y - p1.y);
+	int length = MAX(dx, dy) +  1;
+
+	res = malloc(sizeof(struct PointVector));
+	if (res == NULL) return NULL;
+	res->length = length;
+	res->points = malloc(sizeof(struct Point) * length);
+	if (res->points == NULL) {
+		free(res);
+		return NULL;
+	};
+
+	int x = p1.x;
+	int y = p1.y;
+	int err = dx - dy;
+
+    for (int i = 0; i < length; i++) {
+        res->points[i] = (struct Point){x, y};
+
+        if (x == p2.x && y == p2.y) break;
+
+        int e2 = 2 * err;
+        if (e2 > -dy) {
+            err -= dy;
+            x += 1;
+        }
+        if (e2 < dx) {
+            err += dx;
+            y += 1;
+        }
+    }
+
+	return res;
+}
 
 int draw_triangle_fill(struct Point p1, struct Point p2, struct Point p3) {
 

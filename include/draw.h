@@ -19,11 +19,17 @@ struct Point {
 	int y;
 };
 
+struct PointVector {
+	struct Point* points;
+	int length;
+};
+
 void plotLineLow(int x0, int y0, int x1, int y1);
 void plotLineHigh(int x0, int y0, int x1, int y1);
 void draw_rect(int x, int y, int width, int height);
 void draw_right_triangle(int x, int y, int width, int height);
 int draw_line(struct Point start, struct Point end);
+struct PointVector* draw_line_test(struct Point start, struct Point end);
 int draw_triangle(struct Point p1, struct Point p2, struct Point p3);
 int draw_triangle_fill(struct Point p1, struct Point p2, struct Point p3);
 

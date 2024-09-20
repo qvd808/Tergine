@@ -7,9 +7,6 @@
 #include "util.h"
 #include <ncurses.h>
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
-#define MAX(a,b) (((a)>(b))?(a):(b))
-
 int running = 1;
 void exit_program_handler(int n);
 

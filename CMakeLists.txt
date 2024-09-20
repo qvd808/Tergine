@@ -37,8 +37,8 @@ find_library(CUnit cunit REQUIRED)
 #Build an exuctable
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g2")
 add_executable(Tergine main.c lib/draw.c lib/setup.c lib/util.c)
-add_executable(test ./test/test_matrix.c)
+add_executable(test ./test/main_test.c lib/draw.c lib/setup.c lib/util.c)
 
 #Linked Library
 target_link_libraries(Tergine ${CURSES_LIBRARIES} ${MATH_LIBRARY})
-target_link_libraries(test ${CUnit})
+target_link_libraries(test ${CUnit} ${CURSES_LIBRARIES} ${MATH_LIBRARY})
