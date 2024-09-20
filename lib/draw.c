@@ -66,49 +66,29 @@ void draw_right_triangle(int x, int y, int width, int height) {
 	}
 }
 
+void test(struct Point p1, struct Point p2) {
+	// y =  ax + b
+	// a = y2 - y1/x2 - x1 => y = (y2 - y1)x/(x2 - x1) + b
+	// => (x2 - x1) * y = (y2 - y1) * x + (x2 - x1)* b
+	// Let B = -(x2 - x1), A = (y2 - y1), C = (x2 - x1) * b
+	// => -By = Ax + C
+	// => 0 = Ax + By + C
+	// Let's assume p2 is furhter from the origin point than p1
+	int dx = p2.x - p1.x;
+	int dy = p2.y - p1.y;
+	int prev_x = p1.x;
+	int prev_y = p1.y;
+	for (int i = 0; i <= dx; i++) {
+		float x = prev_x + i;
+		float y = prev_y + (dy * i / (float)dx); // Calculate y based on current x
+		mvaddstr((int)y, (int)x, "*"); // Ensure you're using integer coordinates
+	}
+}
 
 
 int draw_triangle_fill(struct Point p1, struct Point p2, struct Point p3) {
 
-	p1.x *= 2;
-	p2.x *= 2;
-	p3.x *= 2;
-
-
-	int dx1 = p2.x - p1.x;
-	int dy1 = p2.y - p1.y;
-
-	if (abs(dy1) > abs(dx1)) {
-		int xi = 1;
-		int yi = 1;
-		if (dy1 < 0) {
-			yi = -1;
-		}
-		if (dx1 < 0) {
-			xi = -1;
-		}
-		int D = (2*xi*dx1) - yi*dy1;
-		int x = p1.x - 1;
-
-		for (int i = 0; i <= abs(dy1); i++) {
-			mvaddstr(p1.y + yi*i, x, "*");
-			if (D > 0) {
-				x = x + xi;
-				D += dx1*xi - yi*dy1;
-			} else {
-				D += dx1*xi;
-			}
-		}
-
-	}
-
-	attrset(COLOR_PAIR(2));
-	mvaddstr(p1.y, p1.x, "A");
-	attrset(COLOR_PAIR(2));
-	mvaddstr(p2.y, p2.x, "A");
-
-
-
+	test(p1, p2);
 	return 1;
 }
 
