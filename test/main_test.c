@@ -1,5 +1,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
+#include <CUnit/TestRun.h>
 #include <stdio.h>
 #include <string.h>
 #include "draw.h"
@@ -15,7 +16,7 @@
     } while (0)
 
 // Unit test function
-void test_line(void) {
+void test_line_low(void) {
 
 	// Generate expected output
 	struct Point p1 = {
@@ -59,27 +60,35 @@ void test_line(void) {
 	}
 }
 
+void test_line_low_reverse() {
+
+}
+
 int main() {
     // Initialize the CUnit test registry
     if (CU_initialize_registry() != CUE_SUCCESS)
         return CU_get_error();
 
     // Create a test suite
-    CU_pSuite suite = CU_add_suite("Line test suite", 0, 0);
-    if (suite == NULL) {
+    CU_pSuite test_line_algorithm = CU_add_suite("Testing line drawing algorithm", 0, 0);
+    if (test_line_algorithm == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
     // Add the test case to the suite
-    if (CU_add_test(suite, "test of test_line()", test_line) == NULL) {
+    if (CU_add_test(test_line_algorithm, "Test simple line low ", test_line_low) == NULL) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+    if (CU_add_test(test_line_algorithm, "Test simple line low reverse", test_line_low_reverse) == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }
 
     // Run the tests using the basic interface
     CU_basic_set_mode(CU_BRM_VERBOSE);
-    CU_basic_run_tests();
+	CU_basic_run_tests();
 
     // Cleanup
     CU_cleanup_registry();
