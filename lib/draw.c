@@ -109,9 +109,9 @@ struct PointVector* draw_line_test(struct Point p1, struct Point p2) {
 
         if (x == p2.x && y == p2.y) break;
 
-		// e2 = 2 * (dx - dy) => 2 * (dx - dy) >= dy
-		// 2dx >= 3dy
-		// dx/dy >= 3/2
+		// e2 = 2 * (dx - dy) => 2 * (dx - dy) >= -dy
+		// 2dx >= 2dy
+		// dx/dy >= 1
         int e2 = 2 * err;
         if (e2 >= -dy) {
             err -= dy;
@@ -119,7 +119,7 @@ struct PointVector* draw_line_test(struct Point p1, struct Point p2) {
         }
 		// e2 = 2 * (dx - dy) => 2 * (dx - dy) <= dx
 		// dx <= 2*dy
-		// dx/dy <= 2
+		// dy/dx >= 1/2
         if (e2 <= dx) {
             err += dx;
             y += 1;
